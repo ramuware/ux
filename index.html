@@ -404,6 +404,149 @@
     </div> <!-- end of copyright --> 
     <!-- end of copyright -->
     
+<!-- Chat Widget for Ask Ramdas AI -->
+<div id="ask-ramdas-widget">
+  <div id="ar-header">Ask Ramdas AI</div>
+  <div id="ar-messages"></div>
+  <div id="ar-input-area">
+    <textarea id="ar-input" rows="2" placeholder="Ask about my UX experience, projects, or skills..."></textarea>
+    <button id="ar-send">Send</button>
+  </div>
+</div>
+
+<style>
+  #ask-ramdas-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    max-height: 480px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow: hidden;
+    z-index: 9999;
+  }
+
+  #ar-header {
+    padding: 10px 12px;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+
+  #ar-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+  }
+
+  .ar-msg {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    line-height: 1.4;
+  }
+
+  .ar-msg.user {
+    background: #e0f2fe;
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  .ar-msg.bot {
+    background: #f1f5f9;
+    align-self: flex-start;
+  }
+
+  #ar-input-area {
+    display: flex;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  #ar-input {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    resize: none;
+    font-size: 14px;
+    outline: none;
+  }
+
+  #ar-send {
+    border: none;
+    padding: 0 14px;
+    font-size: 14px;
+    cursor: pointer;
+    border-left: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+
+  #ar-send:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+</style>
+
+<script>
+  (function () {
+    const messagesEl = document.getElementById('ar-messages');
+    const inputEl = document.getElementById('ar-input');
+    const sendBtn = document.getElementById('ar-send');
+
+    function addMessage(text, from) {
+      const div = document.createElement('div');
+      div.className = 'ar-msg ' + (from === 'user' ? 'user' : 'bot');
+      div.textContent = text;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      addMessage(text, 'user');
+      inputEl.value = '';
+      sendBtn.disabled = true;
+
+      try {
+        const response = await fetch('chat.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await response.json();
+        const reply = data.reply || 'Sorry, I could not generate a response.';
+        addMessage(reply, 'bot');
+      } catch (err) {
+        addMessage('There was an error contacting Ask Ramdas AI. Please try again later.', 'bot');
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Initial greeting
+    addMessage('Hi, I am Ask Ramdas AI. You can ask me about my UX experience, projects, skills, or design process.', 'bot');
+  })();
+</script>
+
+
+
     	
     <!-- Scripts -->
     <script src="js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
