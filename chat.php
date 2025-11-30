@@ -2,7 +2,7 @@
 // chat.php
 
 // 1. Set your OpenAI API key here (or read it from environment/config)
-$OPENAI_API_KEY = 'openai-domain-verification=dv-aHzU2kXvdc15DBrnAJkCuATi';  // replace this
+$OPENAI_API_KEY = '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';  // replace this
 
 // 2. Read JSON input from the browser
 $input = json_decode(file_get_contents('php://input'), true);
