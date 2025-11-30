@@ -2,7 +2,7 @@
 // chat.php
 
 // 1. Set your OpenAI API key here (or read it from environment/config)
-$OPENAI_API_KEY = 'Yhttps://chatgpt.com/g/g-692c359cd2e48191b5403540a2e90d05-ask-ramdas-ai';  // replace this
+$OPENAI_API_KEY = 'openai-domain-verification=dv-aHzU2kXvdc15DBrnAJkCuATi';  // replace this
 
 // 2. Read JSON input from the browser
 $input = json_decode(file_get_contents('php://input'), true);
